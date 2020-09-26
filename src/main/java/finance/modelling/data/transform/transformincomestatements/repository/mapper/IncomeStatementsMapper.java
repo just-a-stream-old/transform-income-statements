@@ -11,6 +11,6 @@ import org.mapstruct.factory.Mappers;
 public interface IncomeStatementsMapper {
     IncomeStatementsMapper INSTANCE = Mappers.getMapper(IncomeStatementsMapper.class);
 
-    IncomeStatements IncomeStatementsDTOToIncomeStatements(FmpIncomeStatementsDTO fmpIncomeStatementsDTO);
-    IncomeStatement IncomeStatementDTOToIncomeStatement(FmpIncomeStatementDTO fmpIncomeStatementDTO);
+    IncomeStatements incomeStatementsDTOToIncomeStatements(FmpIncomeStatementsDTO fmpIncomeStatementsDTO);
+    IncomeStatement incomeStatementDTOToIncomeStatement(FmpIncomeStatementDTO fmpIncomeStatementDTO);
 }

@@ -1,6 +1,5 @@
 package finance.modelling.data.transform.transformincomestatements.service;
 
-
 import finance.modelling.fmcommons.data.schema.fmp.dto.FmpIncomeStatementsDTO;
 import org.apache.kafka.streams.kstream.KStream;
 

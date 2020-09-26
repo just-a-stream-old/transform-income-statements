@@ -6,7 +6,6 @@ import finance.modelling.data.transform.transformincomestatements.repository.map
 import finance.modelling.data.transform.transformincomestatements.service.config.TopicConfig;
 import finance.modelling.fmcommons.data.logging.LogDb;
 import finance.modelling.fmcommons.data.logging.kstream.LogMessageConsumed;
-import finance.modelling.fmcommons.data.schema.fmp.dto.FmpBalanceSheetsDTO;
 import finance.modelling.fmcommons.data.schema.fmp.dto.FmpIncomeStatementsDTO;
 import finance.modelling.fmcommons.data.schema.model.IncomeStatements;
 import org.apache.kafka.streams.kstream.KStream;
@@ -21,15 +20,15 @@ import java.util.function.Consumer;
 public class IncomeStatementDataModelServiceImpl implements IncomeStatementDataModelService {
 
     private final TopicConfig topics;
-    private final IncomeStatementRepository IncomeStatementRepository;
+    private final IncomeStatementRepository incomeStatementRepository;
     private final MongoDbConfig dbConfig;
 
     public IncomeStatementDataModelServiceImpl(
             TopicConfig topics,
-            IncomeStatementRepository IncomeStatementRepository,
+            IncomeStatementRepository incomeStatementRepository,
             MongoDbConfig dbConfig) {
         this.topics = topics;
-        this.IncomeStatementRepository = IncomeStatementRepository;
+        this.incomeStatementRepository = incomeStatementRepository;
         this.dbConfig = dbConfig;
     }
 
@@ -37,17 +36,17 @@ public class IncomeStatementDataModelServiceImpl implements IncomeStatementDataM
     public Consumer<KStream<String, FmpIncomeStatementsDTO>> generateIncomeStatementDataModel() {
         return fmpBalanceSheets -> fmpBalanceSheets
                 .transformValues(() -> new LogMessageConsumed<>(topics.getTraceIdHeaderName()))
-                .mapValues(IncomeStatementsMapper.INSTANCE::IncomeStatementsDTOToIncomeStatements)
+                .mapValues(IncomeStatementsMapper.INSTANCE::incomeStatementsDTOToIncomeStatements)
                 .foreach(this::saveToIncomeStatementRepository);
     }
 
-    protected void saveToIncomeStatementRepository(String _key, IncomeStatements IncomeStatements) {
+    protected void saveToIncomeStatementRepository(String _key, IncomeStatements incomeStatements) {
         Mono
-                .just(IncomeStatements)
-                .flatMap(IncomeStatementRepository::save)
+                .just(incomeStatements)
+                .flatMap(incomeStatementRepository::save)
                 .subscribe(
-                        IncomeStatementsMono -> LogDb.logInfoDataItemSaved(
-                                IncomeStatements.class, IncomeStatementsMono.getSymbol(), dbConfig.getDbUri()),
+                        incomeStatementsMono -> LogDb.logInfoDataItemSaved(
+                                IncomeStatements.class, incomeStatementsMono.getSymbol(), dbConfig.getDbUri()),
                         error -> LogDb.logErrorFailedDataItemSave(
                                 IncomeStatements.class, error, dbConfig.getDbUri(), List.of("Log and fail"))
                 );
