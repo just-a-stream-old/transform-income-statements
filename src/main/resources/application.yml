@@ -26,7 +26,7 @@ spring:
             dlqName: ${GENERATE_INCOME_STATEMENT_DATA_MODEL_DLQ_TOPIC_0}
 
         binder:
-          applicationId: ${GENERATE_INCOME_STATEMENT_DATA_MODEL_APP_ID_0:nonprod_income_statement_data_model_in_0_fmp_income_statement_consumer_0_id_000005}
+          applicationId: ${GENERATE_INCOME_STATEMENT_DATA_MODEL_APP_ID_0:nonprod_income_statement_data_model_in_0_fmp_income_statement_consumer_0_id_000017}
           brokers: ${KAFKA_BROKER_ADDRESS:localhost:9092}
           deserializationExceptionHandler: ${DESERIALIZATION_EXCEPTION_HANDLER:logAndFail} # Optional: logAndFail, sendToDlq, logAndContinue
           configuration:
